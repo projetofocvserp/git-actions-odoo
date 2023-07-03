@@ -30,14 +30,15 @@ jobs:
 
       - name: Increment the tag
         id: increment-tag
-        uses: actions/github-script@v5
-        with:
-          script: |
-            const currentTag = context.outputs.tag;
-            const tagParts = currentTag.split('.');
-            const incrementedTag = (parseInt(tagParts[tagParts.length - 1], 10) + 1).toString();
-            const newTag = [...tagParts.slice(0, -1), incrementedTag].join('.');
-            core.setOutput('tag', newTag);
+        run: |
+          tag=${{ steps.get-latest-tag.outputs.tag }}
+          IFS='.' read -ra parts <<< "$tag"
+          lastPart=${parts[-1]}
+          incrementedTag="$tag"
+          if [[ $lastPart =~ ^[0-9]+$ ]]; then
+            incrementedTag="${parts[@]:0:${#parts[@]}-1}.$(($lastPart + 1))"
+          fi
+          echo ::set-output name=tag::$incrementedTag
 
       - name: Build and tag Docker image
         run: |
