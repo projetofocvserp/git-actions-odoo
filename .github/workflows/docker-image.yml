@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -18,16 +18,31 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
+          aws-region: <your-aws-region>
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Get the latest image tag
+        id: get-latest-tag
+        run: echo ::set-output name=tag::$(git describe --tags --abbrev=0 || echo 0)
+
+      - name: Increment the tag
+        id: increment-tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const currentTag = context.outputs.tag;
+            const tagParts = currentTag.split('.');
+            const incrementedTag = (parseInt(tagParts[tagParts.length - 1], 10) + 1).toString();
+            const newTag = [...tagParts.slice(0, -1), incrementedTag].join('.');
+            core.setOutput('tag', newTag);
+
       - name: Build and tag Docker image
         run: |
-          docker build -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:latest .
+          docker build -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:${{ steps.increment-tag.outputs.tag }} .
 
       - name: Push Docker image to ECR
         run: |
-          docker push 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:latest
+          docker push 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:${{ steps.increment-tag.outputs.tag }}
