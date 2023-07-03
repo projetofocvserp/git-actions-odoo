@@ -36,7 +36,7 @@ jobs:
           lastPart=${parts[-1]}
           incrementedTag="$tag"
           if [[ $lastPart =~ ^[0-9]+$ ]]; then
-            incrementedTag="${parts[@]:0:${#parts[@]}-1}.$(($lastPart + 1))"
+            incrementedTag="${parts[@]:0:${#parts[@]}-1}.$((lastPart + 1))"
           fi
           echo ::set-output name=tag::$incrementedTag
 
