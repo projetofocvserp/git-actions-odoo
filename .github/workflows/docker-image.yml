@@ -30,7 +30,9 @@ jobs:
 
       - name: Get the date
         id: date
-        run: echo "::set-output name=tag::$(date +%Y%m%d%H%M)"
+        run: |
+          TZ="America/Sao_Paulo"
+          echo "::set-output name=tag::$(date +%Y%m%d%H%M)"
       
       - name: Build and tag Docker image
         run: |
