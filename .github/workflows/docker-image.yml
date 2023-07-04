@@ -43,7 +43,7 @@ jobs:
       - name: Build and tag Docker image
         run: |
           docker build -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:${{ steps.increment-tag.outputs.tag }} .
-
+          
       - name: Push Docker image to ECR
         run: |
           docker push 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:${{ steps.increment-tag.outputs.tag }}
