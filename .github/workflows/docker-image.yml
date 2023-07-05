@@ -24,6 +24,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Get odoo repositories to extra-addons
+        run: |
+          git clone -b 14.0 https://github.com/projetofocvserp/reporting-engine.git extra-addons/reporting-engine
+          git clone -b 14.0 https://github.com/projetofocvserp/l10n-brazil.git extra-addons/l10n-brazil
+
       - name: Get the latest image tag
         id: get-latest-tag
         run: echo ::set-output name=tag::$(git describe --tags --abbrev=0 || echo 0)
