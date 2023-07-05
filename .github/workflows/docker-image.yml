@@ -32,15 +32,17 @@ jobs:
         id: date
         run: |
           TZ="America/Sao_Paulo"
-          echo "::set-output name=tag::$(date +%Y%m%d%H%M)"
+          echo "tag=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
       
       - name: Build and tag Docker image
         env:
-          DOCKER_BUILDKIT: 1
+          tag: ${{ env.tag }}
         run: |
-          docker build -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:${{ steps.date.outputs.tag }} .
+          docker build -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:$tag .
       
       - name: Push Docker image to ECR
+        env:
+          tag: ${{ env.tag }}
         run: |
-          docker push 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:${{ steps.date.outputs.tag }}
+          docker push 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:$tag
       
