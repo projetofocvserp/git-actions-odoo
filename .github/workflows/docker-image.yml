@@ -36,6 +36,7 @@ jobs:
       
       - name: Build and tag Docker image
         env:
+          DOCKER_BUILDKIT: 1
           tag: ${{ env.tag }}
         run: |
           docker build -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:$tag .
