@@ -26,8 +26,8 @@ jobs:
 
       - name: Get odoo repositories to extra-addons
         run: |
-          git clone -b 14.0 https://github.com/projetofocvserp/reporting-engine.git extra-addons/reporting-engine
-          git clone -b 14.0 https://github.com/projetofocvserp/l10n-brazil.git extra-addons/l10n-brazil
+          git clone -b 14.0 --depth=1 --single-branch https://github.com/projetofocvserp/reporting-engine.git extra-addons/
+          git clone -b 14.0 --depth=1 --single-branch https://github.com/projetofocvserp/l10n-brazil.git extra-addons/
 
       - name: Get the latest image tag
         id: get-latest-tag
@@ -49,4 +49,20 @@ jobs:
           tag: ${{ env.tag }}
         run: |
           docker push 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:$tag
+
+      - name: Install and configure kubectl
+        run: |
+          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+          aws eks --region us-east-2 update-kubeconfig --name bullseye
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      - name: Deploy to EKS
+        env:
+          tag: ${{ env.tag }}
+        run: |
+          kubectl set image deployment/odoo odoo=581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:$tag --namespace testing
       
