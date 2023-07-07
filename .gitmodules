@@ -1,0 +1,12 @@
+[submodule "extra-addons/server-tools"]
+	path = extra-addons/server-tools
+	url = git@github.com:projetofocvserp/server-tools.git
+	branch = 14.0
+[submodule "extra-addons/sessions"]
+	path = extra-addons/sessions
+	url = git@github.com:projetofocvserp/sessions.git
+	branch = 14.0
+[submodule "extra-addons/ax4b_theme"]
+	path = extra-addons/ax4b_theme
+	url = git@github.com:projetofocvserp/ax4b_theme.git
+	branch = 14.0
