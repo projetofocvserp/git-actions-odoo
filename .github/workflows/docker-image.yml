@@ -55,7 +55,7 @@ jobs:
           curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
-          aws eks --region us-east-2 update-kubeconfig --name bullseye
+          aws eks update-kubeconfig --name bullseye --region us-east-2 --role-arn arn:aws:iam::581989799031:role/RoleEksClusterSuperAdmin --alias bullseye
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
