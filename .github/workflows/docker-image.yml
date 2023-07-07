@@ -12,9 +12,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout submodules
-        run: git submodule update --init --recursive
+        uses: srt32/git-actions@v0.0.3
+        with:
+          args: git submodule update --init --recursive 
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
