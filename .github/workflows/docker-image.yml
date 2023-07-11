@@ -16,7 +16,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_HUB_SECRET }}
+
+      - name: Checkout submodules
+        uses: srt32/git-actions@v0.0.3
+        with:
+          token: ${{ secrets.RELEASE_HUB_SECRET }}
+          args: git submodule update --init --recursive
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
