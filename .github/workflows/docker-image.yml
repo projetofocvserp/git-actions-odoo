@@ -21,7 +21,6 @@ jobs:
       - name: Checkout submodules
         uses: srt32/git-actions@v0.0.3
         with:
-          token: ${{ secrets.RELEASE_HUB_SECRET }}
           args: git submodule update --init --recursive
 
       - name: Configure AWS credentials
