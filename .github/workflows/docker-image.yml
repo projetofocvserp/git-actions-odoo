@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Remove extra-addons folder
+        run: rm -rf extra-addons
+
       - name: Checkout code
         uses: actions/checkout@v2
         with:
@@ -25,11 +28,6 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-
-      # - name: Get odoo repositories to extra-addons
-      #   run: |
-      #     git clone -b 14.0 --depth=1 --single-branch https://github.com/projetofocvserp/reporting-engine.git extra-addons/
-      #     git clone -b 14.0 --depth=1 --single-branch https://github.com/projetofocvserp/l10n-brazil.git extra-addons/
 
       - name: Get the latest image tag
         id: get-latest-tag
@@ -67,4 +65,3 @@ jobs:
       #     tag: ${{ env.tag }}
       #   run: |
       #     kubectl set image deployment/odoo odoo=581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:$tag --namespace testing
-      
