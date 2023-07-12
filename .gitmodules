@@ -10,3 +10,6 @@
 	path = extra-addons/ax4b_theme
 	url = git@github.com:projetofocvserp/ax4b_theme.git
 	branch = 14.0
+[submodule "applications"]
+	path = applications
+	url = git@github.com:projetofocvserp/applications.git
