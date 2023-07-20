@@ -11,7 +11,7 @@ config = configparser.ConfigParser()
 config.read_file(ini_file)
 
 config.set('options', 'addons_path',
-           '/usr/lib/python3/dist-packages/odoo/addons, /new/addons/path, /mnt/extra/addons/')
+           '/usr/lib/python3/dist-packages/odoo/addons, /mnt/extra-addons/sessions, /mnt/extra-addons/server-tools')
 
 with StringIO() as ini_file:
     config.write(ini_file)
