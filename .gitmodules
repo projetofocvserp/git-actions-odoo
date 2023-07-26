@@ -18,3 +18,7 @@
 	path = extra-addons/comission
 	url = git@github.com:projetofocvserp/commission.git
 	branch = 14.0
+[submodule "extra-addons/bank-payment"]
+	path = extra-addons/bank-payment
+	url = git@github.com:projetofocvserp/bank-payment.git
+	branch = 14.0
