@@ -14,3 +14,7 @@
 	path = extra-addons/applications
 	url = git@github.com:projetofocvserp/applications.git
 	branch = main
+[submodule "extra-addons/comission"]
+	path = extra-addons/comission
+	url = git@github.com:projetofocvserp/commission.git
+	branch = 14.0
