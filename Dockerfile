@@ -94,8 +94,8 @@ ENV PYTHONUNBUFFERED=1
 ENV PATH="$PATH:/root/.local/bin"
 ARG ODOO_REQUIREMENTS=https://raw.githubusercontent.com/odoo/odoo/15.0/requirements.txt
 
-RUN pip3 install --no-cache-dir --user -r ${ODOO_REQUIREMENTS} && pip3 install --user --no-cache-dir flanker \
-    && pip3 install --user --no-cache -U pyopenssl
+RUN pip3 install -r ${ODOO_REQUIREMENTS} && pip3 install flanker \
+    && pip3 install -U pyopenssl
 
 # ///////////////////////////////////
 # ########## Odoo Build ##########
@@ -154,8 +154,9 @@ COPY --chown=${USERNAME}:${USERNAME} ./config/k8s/odoo.conf ${ODOO_RC}
 COPY --chown=${USERNAME}:${USERNAME} --chmod=744 ./config/k8s/entrypoint.sh /
 COPY --chown=${USERNAME}:${USERNAME} --chmod=744 ./config/k8s/wait-for-psql.py /usr/local/bin/wait-for-psql.py
 
-RUN pip3 install --user -r /mnt/extra-addons/requirements/requirements.txt \
-    && pip3 install --user -U pyopenssl
+RUN pip3 install -r /mnt/extra-addons/requirements/requirements.txt
+
+RUN pip3 install -U pyopenssl
 
 USER odoo
 
