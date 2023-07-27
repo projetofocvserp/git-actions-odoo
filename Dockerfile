@@ -154,7 +154,7 @@ COPY --chown=${USERNAME}:${USERNAME} ./config/k8s/odoo.conf ${ODOO_RC}
 COPY --chown=${USERNAME}:${USERNAME} --chmod=744 ./config/k8s/entrypoint.sh /
 COPY --chown=${USERNAME}:${USERNAME} --chmod=744 ./config/k8s/wait-for-psql.py /usr/local/bin/wait-for-psql.py
 
-RUN pip3 install -r /mnt/extra-addons/requirements.txt
+RUN pip3 install -r /mnt/extra-addons/requirements/requirements.txt
 
 USER odoo
 
