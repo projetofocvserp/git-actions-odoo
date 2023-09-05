@@ -6,8 +6,11 @@ SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 ENV LANG=C.UTF-8
 ENV TZ=America/Sao_Paulo
 ENV DEBIAN_FRONTEND=noninteractive
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo 'Acquire::http::Proxy "http://192.168.88.13:3142";' > /etc/apt/apt.conf.d/00aptproxy \
+    && echo 'Acquire::HTTPS::Proxy "false";' >> /etc/apt/apt.conf.d/00aptproxy \
     && echo $TZ > /etc/timezone \
     && apt-get update \
     && apt upgrade -y && \
@@ -92,10 +95,11 @@ FROM ubuntu_base as python_base
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PATH="$PATH:/root/.local/bin"
-ARG ODOO_REQUIREMENTS=https://raw.githubusercontent.com/odoo/odoo/15.0/requirements.txt
+ARG ODOO_REQUIREMENTS=https://raw.githubusercontent.com/odoo/odoo/16.0/requirements.txt
 
-RUN pip3 install -r ${ODOO_REQUIREMENTS} && pip3 install flanker \
-    && pip3 install -U pyopenssl
+RUN pip3 install --no-cache-dir --user -r ${ODOO_REQUIREMENTS} && pip3 install --user --no-cache-dir flanker \
+    && pip3 install --user --no-cache -U pyopenssl
+
 
 # ///////////////////////////////////
 # ########## Odoo Build ##########
@@ -123,7 +127,7 @@ RUN curl -o wkhtmltox.deb -sSL ${WKHTMLTOPDF_FILE} \
     && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
 # INSTALL ODOO
-ARG ODOO_VERSION=15.0
+ARG ODOO_VERSION=16.0
 ARG ODOO_RELEASE=latest
 ARG ODOO_SHA=ea86be3815a763d091f25e1be6f24ca904feed6d
 RUN curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION}.${ODOO_RELEASE}_all.deb \
@@ -140,11 +144,14 @@ RUN npm install -g rtlcss sass less
 RUN touch /var/log/odoo/odoo-server.log \ 
     && ln -sf /dev/stdout /var/log/odoo/odoo-server.log
 
-FROM odoo_base
+
+# ///////////////////////////////////
+# ########## Kubernetes Build ######
+# \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+FROM odoo_base as kubernetes_base
 
 SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 
-ARG USERNAME=odoo
 ARG ODOO_ADDONS=/mnt/extra-addons
 ENV ODOO_RC=/etc/odoo/odoo.conf
 ENV PATH="$PATH:/home/odoo/.local/bin"
@@ -154,9 +161,7 @@ COPY --chown=${USERNAME}:${USERNAME} ./config/k8s/odoo.conf ${ODOO_RC}
 COPY --chown=${USERNAME}:${USERNAME} --chmod=744 ./config/k8s/entrypoint.sh /
 COPY --chown=${USERNAME}:${USERNAME} --chmod=744 ./config/k8s/wait-for-psql.py /usr/local/bin/wait-for-psql.py
 
-RUN pip3 install -r /mnt/extra-addons/requirements/requirements.txt
-
-RUN pip3 install -U pyopenssl
+RUN pip3 install --no-cache-dir --user -r ${ODOO_ADDONS}/requirements/requirements.txt
 
 USER odoo
 
@@ -165,3 +170,8 @@ EXPOSE 8069 8072
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["odoo", "-c", "/etc/odoo/odoo.conf"]
+
+# docker build --no-cache -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/odoo-base:odoo16c -f Dockerfile.kubernetes .
+
+# docker build --no-cache -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:base .
+
