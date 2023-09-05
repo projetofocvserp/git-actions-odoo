@@ -46,3 +46,7 @@
 	path = extra-addons/account-financial-reporting
 	url = git@github.com:projetofocvserp/account-financial-reporting
 	branch = 16.0-artesp-testing
+[submodule "extra-addons/requirements"]
+	path = extra-addons/requirements
+	url = git@github.com:projetofocvserp/requirements
+	branch = 16.0-artesp-testing
