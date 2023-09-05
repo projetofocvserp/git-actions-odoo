@@ -1,5 +1,3 @@
-
-
 To remove a submodule you need to:
 
     Delete the relevant section from the .gitmodules file.
@@ -10,3 +8,10 @@ To remove a submodule you need to:
     Commit git commit -m "Removed submodule "
     Delete the now untracked submodule files rm -rf path_to_submodule
 
+# Comandos basicos
+
+- git submodule update --init --remote
+- git submodule add -b BRANCH GITHUBREPO DEST/FOLDER
+- git submodule sync
+- git submodule update --init --recursive --remote
+- git submodule foreach 'git b'
