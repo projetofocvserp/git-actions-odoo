@@ -2,3 +2,47 @@
 	path = extra-addons/sessions
 	url = git@github.com:projetofocvserp/sessions
 	branch = 16.0
+[submodule "extra-addons/account-reconcile"]
+	path = extra-addons/account-reconcile
+	url = git@github.com:projetofocvserp/account-reconcile
+	branch = 16.0-artesp-testing
+[submodule "extra-addons/l10n-brazil-ax4b"]
+	path = extra-addons/l10n-brazil-ax4b
+	url = git@github.com:projetofocvserp/l10n-brazil-ax4b
+	branch = 16.0-artesp-testing
+[submodule "extra-addons/contract"]
+	path = extra-addons/contract
+	url = git@github.com:projetofocvserp/contract
+	branch = 16.0-artesp-testing
+[submodule "extra-addons/commission"]
+	path = extra-addons/commission
+	url = git@github.com:projetofocvserp/commission
+	branch = 16.0-artesp-testing
+[submodule "extra-addons/reporting-engine"]
+	path = extra-addons/reporting-engine
+	url = git@github.com:projetofocvserp/reporting-engine
+	branch = 16.0-artesp-testing
+[submodule "extra-addons/purchase-workflow"]
+	path = extra-addons/purchase-workflow
+	url = git@github.com:projetofocvserp/purchase-workflow
+	branch = 16.0-artesp-testing
+[submodule "extra-addons/focvs-artesp"]
+	path = extra-addons/focvs-artesp
+	url = git@github.com:projetofocvserp/focvs-artesp
+	branch = 16.0-artesp-testing
+[submodule "extra-addons/account-financial-tools"]
+	path = extra-addons/account-financial-tools
+	url = git@github.com:projetofocvserp/account-financial-tools
+	branch = 16.0-artesp-testing
+[submodule "extra-addons/bank-statement-import"]
+	path = extra-addons/bank-statement-import
+	url = git@github.com:projetofocvserp/bank-statement-import
+	branch = 16.0-artesp-testing
+[submodule "extra-addons/server-ux"]
+	path = extra-addons/server-ux
+	url = git@github.com:projetofocvserp/server-ux
+	branch = 16.0-artesp-testing
+[submodule "extra-addons/account-financial-reporting"]
+	path = extra-addons/account-financial-reporting
+	url = git@github.com:projetofocvserp/account-financial-reporting
+	branch = 16.0-artesp-testing
