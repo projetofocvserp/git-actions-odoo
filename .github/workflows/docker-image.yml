@@ -46,14 +46,14 @@ jobs:
       - name: Get the date
         id: date
         run: echo "tag=$(TZ=America/Sao_Paulo date +%Y%m%d%H%M)" >> $GITHUB_ENV
-        
+
       - name: Build and tag Docker image
         env:
           DOCKER_BUILDKIT: 1
           tag: ${{ env.tag }}
         run: |
           docker build -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:$tag .
-      
+
       - name: Push Docker image to ECR
         env:
           tag: ${{ env.tag }}
@@ -65,11 +65,11 @@ jobs:
           curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
-          aws eks update-kubeconfig --name test-ci-cd --region us-east-2 --role-arn arn:aws:iam::581989799031:role/RoleEksClusterSuperAdmin --alias test-ci-cd
+          aws eks update-kubeconfig --name testing --region us-east-2 --role-arn arn:aws:iam::581989799031:role/RoleEksClusterSuperAdmin --alias testing
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      
+
       - name: Deploy to EKS
         env:
           tag: ${{ env.tag }}
