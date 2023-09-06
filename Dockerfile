@@ -9,8 +9,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo 'Acquire::http::Proxy "http://192.168.88.13:3142";' > /etc/apt/apt.conf.d/00aptproxy \
-    && echo 'Acquire::HTTPS::Proxy "false";' >> /etc/apt/apt.conf.d/00aptproxy \
+    # && echo 'Acquire::http::Proxy "http://192.168.88.13:3142";' > /etc/apt/apt.conf.d/00aptproxy \
+    # && echo 'Acquire::HTTPS::Proxy "false";' >> /etc/apt/apt.conf.d/00aptproxy \
     && echo $TZ > /etc/timezone \
     && apt-get update \
     && apt upgrade -y && \
