@@ -20,8 +20,8 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.RELEASE_HUB_SECRET }}
+        # with:
+        #   token: ${{ secrets.RELEASE_HUB_SECRET }}
 
       - name: Checkout submodules
         run: |
