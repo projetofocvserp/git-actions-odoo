@@ -1,42 +1,49 @@
-import configparser
-from io import StringIO
-from pathlib import Path
-from typing import Any, Dict
+# -*- coding: utf-8 -*-
+# __maintainer__ = marcelomarcon
 
-import yaml
+from pathlib import Path
 
 
 def get_submodules_from_extra_addons_folder() -> str:
-    BASE = Path('extra-addons')
-    submodule_paths = ["/mnt/" + str(module)
-                       for module in BASE.glob('*') if module.is_dir()]
-    return ', '.join(submodule_paths)
+    base_path = Path(".")
+    submodule_paths = [
+        "/mnt/" + str(module) for module in base_path.glob("*") if module.is_dir()
+    ]
+    return ", ".join(submodule_paths)
 
 
-def generate_new_configmap() -> Dict[str, Any]:
-    with open('config_map.yaml', 'r') as f:
-        data = yaml.safe_load(f)
+def generate_new_configmap():
+    with open("config_map.yaml", "r", encoding="utf-8") as f:
+        lines = f.readlines()
 
-    ini_str = data['data']['odoo.conf']
-    ini_file = StringIO(ini_str)
-    config = configparser.ConfigParser()
-    config.read_file(ini_file)
+    start_line = None
+    end_line = None
 
-    config.set('options', 'addons_path',
-               get_submodules_from_extra_addons_folder())
+    for i, line in enumerate(lines):
+        if "odoo.conf: |+" in line:
+            start_line = i
+        elif start_line is not None and line.startswith("    "):
+            end_line = i
+        elif start_line is not None and not line.startswith("    "):
+            break
 
-    with StringIO() as ini_file:
-        config.write(ini_file)
-        ini_str_updated = ini_file.getvalue()
+    if start_line is not None and end_line is not None:
+        new_addons_path: str = get_submodules_from_extra_addons_folder()
+        for i in range(start_line + 1, end_line + 1):
+            if lines[i].strip().startswith("addons_path ="):
+                lines[i] = (
+                    "    addons_path = /usr/lib/python3/dist-packages/odoo/addons, "
+                    + new_addons_path
+                    + "\n"
+                )
 
-    data['data']['odoo.conf'] = ini_str_updated
-    return data
+    with open("modified_config_map.yaml", "w", encoding="utf-8") as f:
+        f.writelines(lines)
 
 
-def save_to_configmap_file(data: Dict[str, Any]) -> None:
-    with open('config_map.yaml', 'w') as f:
-        yaml.safe_dump(data, f)
+def main():
+    generate_new_configmap()
 
 
-if __name__ == '__main__':
-    save_to_configmap_file(data=generate_new_configmap())
+if __name__ == "__main__":
+    main()

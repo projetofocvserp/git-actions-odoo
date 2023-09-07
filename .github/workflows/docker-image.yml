@@ -85,7 +85,7 @@ jobs:
         run: kubectl get cm/odoo-conf --namespace testing -o yaml > config_map.yaml
 
       - name: Generate ConfigMap
-        run: python configmap_generator.py
+        run: python3 configmap_generator.py
 
       - name: Apply ConfigMap
         run: kubectl apply -f config_map.yaml --namespace testing
