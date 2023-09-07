@@ -87,8 +87,8 @@ jobs:
       - name: Generate ConfigMap
         run: python3 configmap_generator.py
 
-      - name: Apply ConfigMap
-        run: kubectl apply -f config_map.yaml --namespace testing
-        env:
-          tag: ${{ env.tag }}
-          # KUBECONFIG_FILE: ${{ secrets.KUBECONFIG_FILE }}
+      # - name: Apply ConfigMap
+      #   run: kubectl apply -f config_map.yaml --namespace testing
+      #   env:
+      #     tag: ${{ env.tag }}
+      #     # KUBECONFIG_FILE: ${{ secrets.KUBECONFIG_FILE }}
