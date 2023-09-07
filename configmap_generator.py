@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 # __maintainer__ = marcelomarcon
 
+import subprocess
+from io import StringIO
 from pathlib import Path
+
+import yaml
 
 
 def get_submodules_from_extra_addons_folder() -> str:
-    base_path = Path(".")
+    base_path = Path("extra-addons")
     submodule_paths = [
         "/mnt/" + str(module) for module in base_path.glob("*") if module.is_dir()
     ]
@@ -14,35 +18,46 @@ def get_submodules_from_extra_addons_folder() -> str:
 
 def generate_new_configmap():
     with open("config_map.yaml", "r", encoding="utf-8") as f:
-        lines = f.readlines()
+        config_data = yaml.safe_load(f)
 
-    start_line = None
-    end_line = None
+    odoo_config = config_data.get('data', {}).get('odoo.conf', '')
+    lines = odoo_config.split('\n')
 
+    new_addons_path = get_submodules_from_extra_addons_folder()
     for i, line in enumerate(lines):
-        if "odoo.conf: |+" in line:
-            start_line = i
-        elif start_line is not None and line.startswith("    "):
-            end_line = i
-        elif start_line is not None and not line.startswith("    "):
-            break
+        if line.strip().startswith("addons_path ="):
+            lines[i] = "addons_path = /usr/lib/python3/dist-packages/odoo/addons, " + new_addons_path
 
-    if start_line is not None and end_line is not None:
-        new_addons_path: str = get_submodules_from_extra_addons_folder()
-        for i in range(start_line + 1, end_line + 1):
-            if lines[i].strip().startswith("addons_path ="):
-                lines[i] = (
-                    "    addons_path = /usr/lib/python3/dist-packages/odoo/addons, "
-                    + new_addons_path
-                    + "\n"
-                )
+    config_data['data']['odoo.conf'] = '\n'.join(lines)
 
-    with open("modified_config_map.yaml", "w", encoding="utf-8") as f:
-        f.writelines(lines)
+    patch_data = {
+        "data": {
+            "odoo.conf": config_data['data']['odoo.conf']
+        }
+    }
+
+    yaml_str = StringIO()
+    yaml.dump(patch_data, yaml_str)
+    return yaml_str.getvalue()
+
+
+def patch_configmap(yaml_str):
+    command = [
+        'kubectl', 'patch', 'configmap', 'odoo-conf',
+        '--namespace=testing',
+        '--type=merge',
+        '--patch', yaml_str
+    ]
+
+    try:
+        subprocess.run(command, check=True, input=yaml_str, text=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to patch ConfigMap: {e}")
 
 
 def main():
-    generate_new_configmap()
+    yaml_str = generate_new_configmap()
+    patch_configmap(yaml_str)
 
 
 if __name__ == "__main__":

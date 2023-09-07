@@ -78,8 +78,8 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python3 -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
 
       - name: Get the old configmap
         run: kubectl get cm/odoo-conf --namespace testing -o yaml > config_map.yaml
