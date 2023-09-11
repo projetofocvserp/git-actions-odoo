@@ -1,0 +1,46 @@
+apiVersion: v1
+data:
+  odoo.conf: |+
+    [options]
+    addons_path = /usr/lib/python3/dist-packages/odoo/addons, /mnt/extra-addons/purchase-workflow, /mnt/extra-addons/account-financial-reporting, /mnt/extra-addons/server-ux, /mnt/extra-addons/sessions, /mnt/extra-addons/reporting-engine, /mnt/extra-addons/l10n-brazil-ax4b, /mnt/extra-addons/focvs-artesp, /mnt/extra-addons/account-financial-tools, /mnt/extra-addons/bank-statement-import, /mnt/extra-addons/contract, /mnt/extra-addons/account-reconcile, /mnt/extra-addons/commission, /mnt/extra-addons/requirements
+    admin_passwd = adminadmin
+    max_cron_threads = 1
+    limit_time_cpu = 1800
+    limit_time_real = 3600
+    http_enable = True
+    http_port = 8069
+    data_dir = /var/lib/odoo
+    proxy_mode = True
+    server_wide_modules = base,web,session_redis
+    translate_modules = ['all']
+    without_demo = false
+    db_template = template1
+    dbfilter = .*
+    db_name = False
+    db_password = adminadmin
+    db_host = srv-odoo-db
+    db_port = 5432
+    db_user = odoo
+    db_sslmode = prefer
+    list_db = True
+    log_db = False
+    log_db_level = warning
+    log_handler = :INFO
+    log_level = info
+
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"odoo.conf":"[options]\naddons_path = /usr/lib/python3/dist-packages/odoo/addons, /mnt/extra-addons/sessions\nadmin_passwd = adminadmin\nmax_cron_threads = 1\nlimit_time_cpu = 1800\nlimit_time_real = 3600\nhttp_enable = True\nhttp_port = 8069\ndata_dir = /var/lib/odoo\nproxy_mode = True\nserver_wide_modules = base,web,session_redis\ntranslate_modules = ['all']\nwithout_demo = false\ndb_template = template1\ndbfilter = .*\ndb_name = False\ndb_password = adminadmin\ndb_host = srv-odoo-db\ndb_port = 5432\ndb_user = odoo\ndb_sslmode = prefer\nlist_db = True\nlog_db = False\nlog_db_level = warning\nlog_handler = :INFO\nlog_level = info\n\n"},"kind":"ConfigMap","metadata":{"annotations":{"meta.helm.sh/release-name":"ff","meta.helm.sh/release-namespace":"testing","reloader.stakater.com/match":"true"},"creationTimestamp":"2023-09-04T19:33:55Z","labels":{"app":"odoo-app","app.kubernetes.io/managed-by":"Helm"},"name":"odoo-conf","namespace":"testing","resourceVersion":"2469267","uid":"5a202f09-24e3-4be0-8173-8d9b9455d3c7"}}
+    meta.helm.sh/release-name: ff
+    meta.helm.sh/release-namespace: testing
+    reloader.stakater.com/match: "true"
+  creationTimestamp: "2023-09-04T19:33:55Z"
+  labels:
+    app: odoo-app
+    app.kubernetes.io/managed-by: Helm
+  name: odoo-conf
+  namespace: testing
+  resourceVersion: "2519528"
+  uid: 5a202f09-24e3-4be0-8173-8d9b9455d3c7

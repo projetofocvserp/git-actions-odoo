@@ -172,6 +172,5 @@ ENTRYPOINT ["/entrypoint.sh"]
 CMD ["odoo", "-c", "/etc/odoo/odoo.conf"]
 
 # docker build --no-cache -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/odoo-base:odoo16c -f Dockerfile.kubernetes .
-
 # docker build --no-cache -t 581989799031.dkr.ecr.us-east-2.amazonaws.com/temporary:base .
 

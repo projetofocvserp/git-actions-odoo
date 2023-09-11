@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "**.md" # ignores all markdown files
+      - "docs/**" # ignores all files in the docs folder
+      - ".gitignore"
 
 jobs:
   build-and-push:
