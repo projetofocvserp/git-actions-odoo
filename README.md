@@ -2,7 +2,7 @@
 
 ## CONFIGURAÇÕES DE SUBMODULOS
 
-To remove a submodule you need to:
+Para remover os submodulos:
 
     Delete the relevant section from the .gitmodules file.
     Stage the .gitmodules changes git add .gitmodules
